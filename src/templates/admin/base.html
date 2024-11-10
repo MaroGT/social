@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <!-- Tailwind CSS (via CDN for simplicity) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS (if needed for more customization) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+}
+
+h1, h2 {
+    font-size: 2rem;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .w-64 {
+        display: none;
+    }
+    .flex-1 {
+        width: 100%;
+    }
+}
+
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <div class="min-h-screen flex">
+        <!-- Left Sidebar -->
+        <div class="w-64 bg-blue-800 text-white p-5">
+            {% include 'admin/nav.html' %}
+        </div>
+    <!-- base.html -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-info">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% endwith %}
+        <!-- Main Content -->
+        <div class="flex-1 p-6">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+    
+    <!-- Tailwind JS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html>

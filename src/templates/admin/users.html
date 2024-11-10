@@ -1,0 +1,41 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Users</h1>
+    <table class="table-auto w-full border-collapse">
+        <thead>
+            <tr>
+                <th class="px-4 py-2 text-left">ID</th>
+                <th class="px-4 py-2 text-left">Name</th>
+                <th class="px-4 py-2 text-left">Email</th>
+                <th class="px-4 py-2 text-left">Balance</th>
+                <th class="px-4 py-2 text-left">Role</th>
+                <th class="px-4 py-2 text-left">Account Status</th>
+                <th class="px-4 py-2 text-left">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr class="border-b">
+                <td class="px-4 py-2">{{ user.id }}</td>
+                <td class="px-4 py-2">{{ user.name }}</td>
+                <td class="px-4 py-2">{{ user.email }}</td>
+                <td class="px-4 py-2">${{ user.balance }}</td>
+                <td class="px-4 py-2">{{ 'Admin' if user.is_admin else 'User' }}</td>
+                <td class="px-4 py-2">{{ user.status.value }}</td>
+                <td class="px-4 py-2">
+                    <a href="{{ url_for('admin.update_status', user_id=user.id, status='active') }}" class="text-green-500 hover:underline">Activate</a>
+                    |
+                    <a href="{{ url_for('admin.update_status', user_id=user.id, status='suspended') }}" class="text-yellow-500 hover:underline">Suspend</a>
+                    |
+                    <a href="{{ url_for('admin.update_status', user_id=user.id, status='blocked') }}" class="text-red-500 hover:underline">Block</a>
+                    |
+                    <a href="{{ url_for('admin.user_preview', user_id=user.id) }}" class="text-blue-500 hover:underline">More Info</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

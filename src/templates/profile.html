@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <h2>Your Profile</h2>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="name">Name</label>
+            {{ form.name(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            {{ form.email(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="password">New Password (Leave blank to keep current)</label>
+            {{ form.password(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+</div>
+
+{% endblock %}

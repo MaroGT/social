@@ -1,0 +1,21 @@
+{% macro button(text, url, class_name='bg-blue-500') %}
+    <a href="{{ url }}" class="inline-block px-6 py-3 rounded-md text-white {{ class_name }} hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        {{ text }}
+    </a>
+{% endmacro %}
+
+{% macro card(title, body, footer=None) %}
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden mb-6">
+        <div class="bg-blue-600 text-white px-6 py-3 text-lg font-semibold">
+            {{ title }}
+        </div>
+        <div class="px-6 py-4">
+            {{ body }}
+        </div>
+        {% if footer %}
+            <div class="bg-gray-100 px-6 py-3 text-sm text-gray-500">
+                {{ footer }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}

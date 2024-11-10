@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Marketplace{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Explore Products</h2>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4">
+                <div class="product-card">
+                    <h5><strong>Account Name: </strong>{{ product.name }}</h5>
+                    <p class="text-muted">{{ product.description[:100] }}...</p>  <!-- Short preview of description -->
+                    <p><strong>Price:</strong> ${{ product.price }}</p>
+                    <p class="text-muted">Created on: {{ product.created_at.strftime('%B %d, %Y') }}</p>
+                    <p><strong>Age:</strong> {{ product.age }} years</p>  <!-- Display age with decimal places -->
+
+                    
+                    <div class="product-info">
+                     
+                        <a href="{{ url_for('market.product_detail', product_id=product.id) }}" class="btn btn-info">Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

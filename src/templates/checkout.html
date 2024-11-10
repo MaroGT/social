@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+</head>
+
+<body>
+    <h1>Checkout</h1>
+
+    {% if cart %}
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product_id, item in cart.items() %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.price }}</td>
+                <td>${{ item.price * item.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Total: ${{ total }}</h3>
+    <form method="POST">
+        <button type="submit">Confirm Order</button>
+    </form>
+
+
+    <div class="container">
+        <h2>Checkout</h2>
+        <p>Total Price: ${{ price }}</p>
+        <button id="checkout-button" class="btn btn-primary">Pay with Stripe</button>
+    </div>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe("{{ stripe_publishable_key }}");
+
+        document.getElementById("checkout-button").addEventListener("click", async () => {
+            const response = await fetch("/create-checkout-session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    product_name: "Social Media Boost Package",
+                    price: {{ price }},
+                quantity: 1
+            }),
+        });
+
+        const session = await response.json();
+        if (session.error) {
+            alert(session.error);
+        } else {
+            stripe.redirectToCheckout({ sessionId: session.id });
+        }
+    });
+    </script>
+
+
+    {% else %}
+    <p>Your cart is empty.</p>
+    {% endif %}
+</body>
+
+</html>

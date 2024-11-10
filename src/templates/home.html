@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}home{% endblock %}
+
+{% block content %}
+<body>
+    <h1>Welcome to Social Media Store</h1>
+    <div>
+        {% for product in products %}
+            <div>
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <p>${{ product.price }}</p>
+                <a href="{{ url_for('market.product_detail', product_id=product.id) }}">View Details</a>
+            </div>
+        {% endfor %}
+    </div>
+    
+</body>
+</html>
+{% endblock %}

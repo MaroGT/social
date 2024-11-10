@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}home{% endblock %}
+
+
+
+
+{% block content %}
+{% for purchase in purchases %}
+    <div>
+        <h4>{{ purchase.product.name }}</h4>
+        <p>Category: {{ purchase.product.category }}</p>
+        <p>Price: ${{ purchase.price }}</p>
+        <button onclick="document.getElementById('login-info-{{ purchase.id }}').style.display = 'block'">
+            View Login Details
+        </button>
+        <div id="login-info-{{ purchase.id }}" style="display: none;">
+            <p>Login Details: {{ purchase.product.login }}</p>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

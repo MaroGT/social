@@ -1,0 +1,8 @@
+<h2>Your Purchased Products</h2>
+{% for product in product_details %}
+  <div class="product">
+    <h3>{{ product.name }}</h3>
+    <p>Login: {{ product.login }}</p>
+    <p>Password: {{ product.password }}</p>
+  </div>
+{% endfor %}

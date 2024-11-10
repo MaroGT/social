@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Fund User Balance</h1>
+
+    <form method="POST" action="{{ url_for('admin.fund_user') }}">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-4">
+            <label for="user_id" class="block text-lg font-medium">Select User</label>
+            {{ form.user_id(class='mt-1 px-3 py-2 border rounded') }}
+        </div>
+
+        <div class="mb-4">
+            <label for="amount" class="block text-lg font-medium">Amount to Fund</label>
+            {{ form.amount(class='mt-1 px-3 py-2 border rounded') }}
+            {% if form.amount.errors %}
+                <div class="text-red-500 text-sm">
+                    {% for error in form.amount.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-4">
+            <label for="action" class="block text-lg font-medium">Action</label>
+            {{ form.action(class='mt-1 px-3 py-2 border rounded') }}
+        </div>
+
+        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Update Balance</button>
+    </form>
+</div>
+{% endblock %}

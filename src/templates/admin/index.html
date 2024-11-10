@@ -1,0 +1,138 @@
+{% extends "admin/base.html" %}
+{% block content %}
+
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Admin Dashboard</h1>
+
+
+    <!-- Filters -->
+    <div class="mb-8">
+        <form method="get" class="flex gap-4">
+            <select name="status" class="form-select">
+                <option value="all" {% if current_status == 'all' %}selected{% endif %}>All Status</option>
+                <option value="Pending" {% if current_status == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="Processing" {% if current_status == 'Processing' %}selected{% endif %}>Processing</option>
+                <option value="Completed" {% if current_status == 'Completed' %}selected{% endif %}>Completed</option>
+                <option value="Cancelled" {% if current_status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+            <select name="date" class="form-select">
+                <option value="all" {% if current_date == 'all' %}selected{% endif %}>All Time</option>
+                <option value="today" {% if current_date == 'today' %}selected{% endif %}>Today</option>
+                <option value="week" {% if current_date == 'week' %}selected{% endif %}>This Week</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="bg-white rounded-lg shadow overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+                <tr class="bg-gray-50">
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for order in orders %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ order.id }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ order.user.email }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${{ "%.2f"|format(order.total_price) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            {% if order.status == 'Completed' %}bg-green-100 text-green-800
+                            {% elif order.status == 'Pending' %}bg-yellow-100 text-yellow-800
+                            {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800
+                            {% else %}bg-blue-100 text-blue-800{% endif %}">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <form method="POST" action="{{ url_for('main.update_order_status', order_id=order.id) }}" class="inline">
+                            <select name="status" class="form-select form-select-sm mr-2">
+                                <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+                                <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                                <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+ 
+
+
+
+<div class="container">
+    <h1>Admin Dashboard</h1>
+    <hr>
+
+    <h2>Total Sales: ${{ total_sales }}</h2>
+
+    <h3>Pending Orders</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>User</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Payment Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in pending_orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.user_id }}</td>
+                <td>${{ order.total_price }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.payment_status }}</td>
+                <td>{{ order.created_at }}</td>
+                <td>
+                    <a href="{{ url_for('main.update_order_status', order_id=order.id) }}" class="btn btn-sm btn-primary">Mark as Complete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Product Inventory</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>${{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

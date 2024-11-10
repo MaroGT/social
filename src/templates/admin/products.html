@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-6">
+    <h1 class="text-3xl font-semibold mb-4">Product List</h1>
+
+<!-- Add Product Button -->
+<a href="{{ url_for('admin.add_product') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
+    Add Product
+</a>
+
+
+    <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <th class="py-3 px-6 text-left">Name</th>
+                <th class="py-3 px-6 text-left">Description</th>
+                <th class="py-3 px-6 text-left">Price</th>
+                <th class="py-3 px-6 text-left">Category</th>
+                <th class="py-3 px-6 text-left">Stock</th>
+                <th class="py-3 px-6 text-center">Active</th>
+                <th class="py-3 px-6 text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-700 text-sm font-light">
+            {% for product in products %}
+                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-3 px-6 text-left">{{ product.name }}</td>
+                    <td class="py-3 px-6 text-left">{{ product.description[:50] }}...</td>
+                    <td class="py-3 px-6 text-left">${{ product.price }}</td>
+                    <td class="py-3 px-6 text-left">{{ product.category }}</td>
+                    <td class="py-3 px-6 text-left">{{ product.stock }}</td>
+                    <td class="py-3 px-6 text-center">
+                        {% if product.is_active %}
+                            <span class="bg-green-200 text-green-700 py-1 px-3 rounded-full text-xs">Active</span>
+                        {% else %}
+                            <span class="bg-red-200 text-red-700 py-1 px-3 rounded-full text-xs">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        <a href="{{ url_for('admin.edit_product', product_id=product.id) }}" class="text-blue-500 hover:underline">Edit</a> | 
+                        <form action="{{ url_for('admin.delete_product', product_id=product.id) }}" method="POST" style="display: inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  
+                            <button type="submit" class="text-red-500 hover:text-red-700 ml-2" onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
+                        </form>     </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+<!-- user_preview.html -->
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h1 class="text-2xl font-bold mb-4">{{ user.name }}'s Profile</h1>
+    
+    <!-- User Info -->
+    <div class="mb-4">
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Balance:</strong> ${{ user.balance }}</p>
+        <p><strong>Role:</strong> {{ 'Admin' if user.is_admin else 'User' }}</p>
+    </div>
+
+    <!-- Transactions Table -->
+    <h2 class="text-xl font-semibold mb-2">Transactions</h2>
+    <table class="table-auto w-full border-collapse mb-4">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">ID</th>
+                <th class="px-4 py-2">Amount</th>
+                <th class="px-4 py-2">Type</th>
+                <th class="px-4 py-2">Status</th>
+                <th class="px-4 py-2">Payment Method</th>
+                <th class="px-4 py-2">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr class="border-b">
+                <td class="px-4 py-2">{{ transaction.id }}</td>
+                <td class="px-4 py-2">${{ transaction.amount }}</td>
+                <td class="px-4 py-2">{{ transaction.type }}</td>
+                <td class="px-4 py-2">{{ transaction.status }}</td>
+                <td class="px-4 py-2">{{ transaction.payment_method }}</td>
+                <td class="px-4 py-2">{{ transaction.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Purchases Table -->
+    <h2 class="text-xl font-semibold mb-2">Purchases</h2>
+    <table class="table-auto w-full border-collapse mb-4">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">Product</th>
+                <th class="px-4 py-2">Price</th>
+                <th class="px-4 py-2">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchase in purchases %}
+            <tr class="border-b">
+                <td class="px-4 py-2">{{ purchase.product.name }}</td>
+                <td class="px-4 py-2">${{ purchase.price }}</td>
+                <td class="px-4 py-2">{{ purchase.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Orders Table -->
+    <h2 class="text-xl font-semibold mb-2">Orders</h2>
+    <table class="table-auto w-full border-collapse mb-4">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">Product</th>
+                <th class="px-4 py-2">Quantity</th>
+                <th class="px-4 py-2">Total Price</th>
+                <th class="px-4 py-2">Payment Status</th>
+                <th class="px-4 py-2">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr class="border-b">
+                <td class="px-4 py-2">{{ order.product_name }}</td>
+                <td class="px-4 py-2">{{ order.quantity }}</td>
+                <td class="px-4 py-2">${{ order.total_price }}</td>
+                <td class="px-4 py-2">{{ order.payment_status }}</td>
+                <td class="px-4 py-2">{{ order.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Option to Fund User Balance -->
+    <form action="{{ url_for('admin.fund_user_balance', user_id=user.id) }}" method="POST">
+
+        <h3 class="text-xl font-semibold mb-2">Fund Balance</h3>
+        <input type="number" name="amount" class="p-2 border rounded" placeholder="Amount to fund" required>
+        <button type="submit" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">Fund</button>
+    </form>
+</div>
+{% endblock %}
